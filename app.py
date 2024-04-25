@@ -14,7 +14,7 @@ async def root(request: dict):
     req_text = req["userRequest"]["utterance"]
 
     response = ollama.chat(
-        model="llama2",
+        model="EEVE-Korean-10.8B",
         messages=[
             {
                 "role": "user",
@@ -26,7 +26,9 @@ async def root(request: dict):
     res = {
         "version": "2.0",
         "template": {
-            "outputs": [{"simpleText": {"text": response["message"]["content"]}}]
+            "outputs": [
+                {"simpleText": {"text": response["message"]["content"].strip()}}
+            ]
         },
     }
 
