@@ -3,6 +3,8 @@ import json
 import uvicorn
 from pydantic import BaseModel
 
+import ollama
+
 app = FastAPI()
 
 
@@ -11,12 +13,20 @@ async def root(request: dict):
     req = dict(request)
     req_text = req["userRequest"]["utterance"]
 
+    response = ollama.chat(
+        model="llama2",
+        messages=[
+            {
+                "role": "user",
+                "content": req_text,
+            },
+        ],
+    )
+
     res = {
         "version": "2.0",
         "template": {
-            "outputs": [
-                {"simpleText": {"text": f"입력하신 텍스트는 {req_text} 입니다."}}
-            ]
+            "outputs": [{"simpleText": {"text": response["message"]["content"]}}]
         },
     }
 
