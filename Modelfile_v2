@@ -1,0 +1,1 @@
+FROM /home/shin/.cache/huggingface/hub/models--heegyu--EEVE-Korean-Instruct-10.8B-v1.0-GGUF/snapshots/9bf4892cf2017362dbadf99bd9a3523387135362/ggml-model-Q4_K_M.gguf
