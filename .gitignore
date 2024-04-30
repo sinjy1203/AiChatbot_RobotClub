@@ -1,3 +1,4 @@
 *.gguf
 notebooks/
 test_nginx.yaml
+__pycache__/

@@ -11,6 +11,7 @@ import re
 import uvicorn
 
 from templates import TEMPLATE
+from schemas import Request
 from utils import format_docs, add_data, get_response_dict
 
 
@@ -35,9 +36,9 @@ ADD_DATA_PREFIX = "/데이터입력"
 
 
 @app.post("/")
-async def root(request: dict):
-    req = dict(request)
-    req_text = req["userRequest"]["utterance"]
+async def root(request: Request):
+    req_text = request.userRequest.utterance
+
     if req_text.startswith(ADD_DATA_PREFIX):
         response_text = add_data(retriever, req_text, prefix=ADD_DATA_PREFIX)
     else:
