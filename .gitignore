@@ -1,4 +1,5 @@
 *.gguf
 notebooks/
 test_nginx.yaml
+EEVE-Korean-Instruct-10.8B-v1.0-quantized/
 __pycache__/
