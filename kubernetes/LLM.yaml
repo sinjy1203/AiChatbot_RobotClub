@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: llm-deployment
+  labels:
+    app: llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm
+  template:
+    metadata:
+      labels:
+        app: llm
+    spec:
+      containers:
+      - name: vllm
+        image: vllm/vllm-openai:latest
+        ports:
+        - containerPort: 8000
+        args: ["--model", "/EEVE-Korean-Instruct-10.8B-v1.0-quantized", "--quantization", "awq", "--gpu-memory-utilization", "0.8"]
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: 8Gi
+            cpu: "4"
+        volumeMounts:
+        - mountPath: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
+          name: vllm-model
+      volumes:
+      - name: vllm-model
+        hostPath:
+          type: Directory
+          path: /AiChatbot_RobotClub/EEVE-Korean-Instruct-10.8B-v1.0-quantized

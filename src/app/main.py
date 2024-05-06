@@ -3,7 +3,7 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
-from langchain_community.llms import Ollama, VLLM, VLLMOpenAI
+from langchain_community.llms import VLLMOpenAI
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 from fastapi import FastAPI
@@ -22,13 +22,6 @@ retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k
 prompt_rag = PromptTemplate.from_template(TEMPLATE_RAG)
 prompt_chat = PromptTemplate.from_template(TEMPLATE_CHAT)
 
-# llm = Ollama(model="EEVE-Korean-10.8B:v2")
-# llm = VLLM(
-#     model="EEVE-Korean-Instruct-10.8B-v1.0-quantized",
-#     trust_remote_code=True,
-#     max_new_tokens=512,
-#     vllm_kwargs={"quantization": "awq"},
-# )
 llm = VLLMOpenAI(
     openai_api_key="EMPTY",
     openai_api_base="http://localhost:8000/v1",
