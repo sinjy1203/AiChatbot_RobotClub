@@ -4,3 +4,4 @@ test_nginx.yaml
 EEVE-Korean-Instruct-10.8B-v1.0-quantized/
 __pycache__/
 test_nginx/
+embedding_model/

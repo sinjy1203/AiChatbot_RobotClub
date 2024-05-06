@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-deployment
+  labels:
+    app: rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag
+  template:
+    metadata:
+      labels:
+        app: rag
+    spec:
+      containers:
+      - name: rag
+        image: sinjy1203/rag:latest
+        ports:
+        - containerPort: 1200
+        args: ["python", "main.py"]
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: "1"
+          limits:
+            memory: 2Gi
+            cpu: "2"
+        env:
+        - name: EMBEDDING_MODEL
+          value: /embedding_model
+        - name: LLM_API_BASE
+          value: http://llm-service.default:8000/v1
+        - name: MODEL_NAME
+          value: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
+        volumeMounts:
+        - mountPath: /rag
+          name: rag-src
+        - mountPath: /embedding_model
+          name: embedding-model
+      volumes:
+      - name: rag-src
+        hostPath:
+          type: Directory
+          path: /AiChatbot_RobotClub/src/rag
+      - name: embedding-model
+        hostPath:
+          type: Directory
+          path: /AiChatbot_RobotClub/embedding_model
+

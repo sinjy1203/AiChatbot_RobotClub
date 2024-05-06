@@ -1,3 +1,7 @@
+import os
+
+import uvicorn
+from fastapi import FastAPI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
@@ -6,16 +10,18 @@ from langchain_chroma import Chroma
 from langchain_community.llms import VLLMOpenAI
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-from fastapi import FastAPI
-import re
-import uvicorn
-
 from utils import format_docs
 from templates import TEMPLATE_RAG, TEMPLATE_CHAT
 from schemas import Request, Response
 
+EMBEDDING_MODEL = os.environ["EMBEDDING_MODEL"]
+LLM_API_BASE = os.environ["LLM_API_BASE"]
+MODEL_NAME = os.environ["MODEL_NAME"]
 
-embeddings = HuggingFaceEmbeddings(model_name="jhgan/ko-sroberta-multitask")
+
+embeddings = HuggingFaceEmbeddings(
+    model_name="jhgan/ko-sroberta-multitask", cache_folder=EMBEDDING_MODEL
+)
 vectorstore = Chroma(embedding_function=embeddings)
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
@@ -24,8 +30,8 @@ prompt_chat = PromptTemplate.from_template(TEMPLATE_CHAT)
 
 llm = VLLMOpenAI(
     openai_api_key="EMPTY",
-    openai_api_base="http://localhost:8000/v1",
-    model_name="EEVE-Korean-Instruct-10.8B-v1.0-quantized",
+    openai_api_base=LLM_API_BASE,
+    model_name=MODEL_NAME,
     model_kwargs={"stop": ["."]},
 )
 
@@ -47,8 +53,14 @@ async def chat(request: Request) -> Response:
     return Response(text=response_text)
 
 
-@app.post("/")
-async def root(request: Request):
+@app.post("/contexts")
+async def contexts(request: Request) -> Response:
+    retriever.add_documents([Document(page_content=request.text)])
+    return Response(text="데이터 입력이 완료하였습니다.")
+
+
+@app.post("/rag")
+async def rag(request: Request):
     response_text = chain_rag.invoke(request.text).strip()
     return Response(text=response_text)
 
