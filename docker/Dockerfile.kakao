@@ -1,0 +1,7 @@
+FROM python:3.9
+ 
+WORKDIR /kakao
+ 
+COPY ./docker/requirements.kakao.txt /kakao/requirements.kakao.txt
+ 
+RUN pip install --no-cache-dir --upgrade -r /kakao/requirements.kakao.txt

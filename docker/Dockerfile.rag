@@ -1,0 +1,9 @@
+FROM langchain/langchain
+
+WORKDIR /rag
+
+RUN apt-get update 
+RUN pip install --upgrade pip
+
+COPY ./docker/requirements.rag.txt /rag/requirements.rag.txt
+RUN pip install -r requirements.rag.txt
