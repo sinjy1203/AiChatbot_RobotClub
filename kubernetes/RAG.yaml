@@ -47,5 +47,5 @@ spec:
       - name: embedding-model
         hostPath:
           type: Directory
-          path: /AiChatbot_RobotClub/embedding_model
+          path: /AiChatbot_RobotClub/models/embedding_model
 

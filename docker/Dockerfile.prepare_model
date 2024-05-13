@@ -1,0 +1,17 @@
+FROM python:3.10
+
+RUN apt-get update 
+RUN pip install --upgrade pip
+
+WORKDIR /prepare_model
+
+COPY ./docker/requirements.prepare_model.txt /prepare_model/requirements.prepare_model.txt
+RUN pip install --no-cache-dir -r /prepare_model/requirements.prepare_model.txt
+
+RUN pip install -U "huggingface_hub[cli]"
+
+COPY ./src/quantize/quantize_awq.py /prepare_model/quantize_awq.py
+COPY ./docker/prepare_model.sh /prepare_model/prepare_model.sh
+RUN chmod +x /prepare_model/prepare_model.sh
+
+CMD ./prepare_model.sh

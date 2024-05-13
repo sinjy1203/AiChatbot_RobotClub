@@ -32,4 +32,4 @@ spec:
       - name: vllm-model
         hostPath:
           type: Directory
-          path: /AiChatbot_RobotClub/EEVE-Korean-Instruct-10.8B-v1.0-quantized
+          path: /AiChatbot_RobotClub/models/EEVE-Korean-Instruct-10.8B-v1.0-quantized

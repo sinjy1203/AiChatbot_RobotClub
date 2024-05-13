@@ -1,0 +1,2 @@
+python quantize_awq.py --model yanolja/EEVE-Korean-Instruct-10.8B-v1.0 --save-path models/EEVE-Korean-Instruct-10.8B-v1.0-quantized
+huggingface-cli download jhgan/ko-sroberta-multitask --cache-dir models/embedding_model
