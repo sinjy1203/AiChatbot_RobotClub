@@ -10,9 +10,11 @@ git clone https://github.com/sinjy1203/AiChatbot_RobotClub.git
 ```
 ### 2. Prepare model(LLM, Embedding model)
 ```bash
-docker run --gpus all -v /home/shin/VScodeProjects/AiChatbot_RobotClub/models:/prepare_model/models sinjy1203/prepare-model
+docker run --gpus all -v {model_directory}:/prepare_model/models sinjy1203/prepare-model
 ```
 ### 3. Server 실행
+- helm/values.yaml 에서 맞는 디렉토리 수정
 ```bash
-kubectl apply -f ./kubernetes/
+cd helm
+helm install ai-chatbot-robot-club .
 ```
