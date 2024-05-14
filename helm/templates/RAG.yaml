@@ -43,9 +43,9 @@ spec:
       - name: rag-src
         hostPath:
           type: Directory
-          path: /AiChatbot_RobotClub/src/rag
+          path: {{ .Values.rag_src_path }}
       - name: embedding-model
         hostPath:
           type: Directory
-          path: /AiChatbot_RobotClub/models/embedding_model
+          path: {{ .Values.embedding_model_path }}
 

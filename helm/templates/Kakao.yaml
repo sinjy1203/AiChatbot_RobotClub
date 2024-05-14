@@ -37,5 +37,5 @@ spec:
       - name: kakao-src
         hostPath:
           type: Directory
-          path: /AiChatbot_RobotClub/src/kakao
+          path: {{ .Values.kakao_src_path }}
 
