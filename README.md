@@ -2,7 +2,7 @@
 - 인하대학교 로보트연구회 동아리에 대한 정보를 알려주는 AI 챗봇
 - 카카오톡을 통해 챗봇에 동아리에 대한 정보를 입력해주면 챗봇이 정보들을 바탕으로 질문에 답해준다
 ## Prerequisites
-- `Docker`, `kubernetes` installed
+- `Docker`, `kubernetes`, `helm` installed
 ## Usage
 ### 1. Clone code
 ```bash
