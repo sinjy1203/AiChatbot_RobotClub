@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vectorstore-deployment
+  labels:
+    app: vectorstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vectorstore
+  template:
+    metadata:
+      labels:
+        app: vectorstore
+    spec:
+      containers:
+      - name: vectorstore
+        image: chromadb/chroma
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: "1"
+          limits:
+            memory: 2Gi
+            cpu: "2"
+        env:
+        - name: IS_PERSISTENT
+          value: "TRUE"
+        - name: ALLOW_RESET
+          value: "TRUE"
+        volumeMounts:
+        - mountPath: /chroma/chroma
+          name: chroma-data
+      volumes:
+      - name: chroma-data
+        hostPath:
+          type: Directory
+          path: {{ .Values.vectorstore_data_path }}
+    
+    

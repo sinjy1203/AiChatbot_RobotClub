@@ -2,6 +2,9 @@ import os
 
 import uvicorn
 from fastapi import FastAPI
+import chromadb
+from chromadb.config import Settings
+
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
@@ -16,13 +19,19 @@ from schemas import Request, Response
 
 EMBEDDING_MODEL = os.environ["EMBEDDING_MODEL"]
 LLM_API_BASE = os.environ["LLM_API_BASE"]
+CHROMADB_HOST = os.environ["CHROMADB_HOST"]
 MODEL_NAME = os.environ["MODEL_NAME"]
-
 
 embeddings = HuggingFaceEmbeddings(
     model_name="jhgan/ko-sroberta-multitask", cache_folder=EMBEDDING_MODEL
 )
-vectorstore = Chroma(embedding_function=embeddings)
+
+client = chromadb.HttpClient(host=CHROMADB_HOST, settings=Settings(allow_reset=True))
+vectorstore = Chroma(
+    client=client,
+    collection_name="my_collection",
+    embedding_function=embeddings,
+)
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
 prompt_rag = PromptTemplate.from_template(TEMPLATE_RAG)

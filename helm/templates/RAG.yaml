@@ -32,6 +32,8 @@ spec:
           value: /embedding_model
         - name: LLM_API_BASE
           value: http://llm-service.default:8000/v1
+        - name: CHROMADB_HOST
+          value: vectorstore-service.default
         - name: MODEL_NAME
           value: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
         volumeMounts:
