@@ -5,3 +5,7 @@ rag_src_path: /AiChatbot_RobotClub/src/rag
 kakao_src_path: /AiChatbot_RobotClub/src/kakao
 
 vectorstore_data_path: /AiChatbot_RobotClub/chroma-data
+
+langchain_api_key: langchain_api_key
+langchain_tracing_v2: f
+langchain_project: ai-chatbot-robot-club-project

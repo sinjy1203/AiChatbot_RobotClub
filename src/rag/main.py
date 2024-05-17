@@ -17,6 +17,10 @@ from utils import format_docs
 from templates import TEMPLATE_RAG, TEMPLATE_CHAT
 from schemas import Request, Response
 
+os.environ["LANGCHAIN_TRACING_V2"] = (
+    "false" if os.environ["LANGCHAIN_TRACING_V2"] == "f" else "true"
+)
+
 EMBEDDING_MODEL = os.environ["EMBEDDING_MODEL"]
 LLM_API_BASE = os.environ["LLM_API_BASE"]
 CHROMADB_HOST = os.environ["CHROMADB_HOST"]
