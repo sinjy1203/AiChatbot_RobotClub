@@ -22,8 +22,15 @@
 # Assistant:
 # """s
 
+# TEMPLATE_RAG = """
+# Answer the following question in one short sentence based only on the provided context.
+# Context: {context}
+# Human: {prompt}
+# Assistant:
+# """
+
 TEMPLATE_RAG = """
-Answer the following question in one short sentence based only on the provided context.
+A chat between a curious user and an robot club artificial intelligence assistant. The assistant gives answers to the user's questions based on the provided context.
 Context: {context}
 Human: {prompt}
 Assistant:
