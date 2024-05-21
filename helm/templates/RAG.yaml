@@ -28,8 +28,10 @@ spec:
             memory: 2Gi
             cpu: "2"
         env:
-        - name: EMBEDDING_MODEL
+        - name: HUGGINGFACE_CACHE_FOLDER
           value: /embedding_model
+        - name: EMBEDDING_MODEL
+          value: jhgan/ko-sroberta-multitask
         - name: LLM_API_BASE
           value: http://llm-service.default:8000/v1
         - name: CHROMADB_HOST
