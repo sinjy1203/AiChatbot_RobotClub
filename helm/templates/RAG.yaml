@@ -18,7 +18,7 @@ spec:
       - name: rag
         image: sinjy1203/rag:latest
         ports:
-        - containerPort: 1200
+        - containerPort: 1204
         args: ["python", "main.py"]
         resources:
           requests:
@@ -28,14 +28,22 @@ spec:
             memory: 2Gi
             cpu: "2"
         env:
-        - name: EMBEDDING_MODEL
+        - name: HUGGINGFACE_CACHE_FOLDER
           value: /embedding_model
+        - name: EMBEDDING_MODEL
+          value: jhgan/ko-sroberta-multitask
         - name: LLM_API_BASE
           value: http://llm-service.default:8000/v1
         - name: CHROMADB_HOST
           value: vectorstore-service.default
         - name: MODEL_NAME
           value: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
+        - name: LANGCHAIN_API_KEY
+          value: {{ .Values.langchain_api_key }}
+        - name: LANGCHAIN_TRACING_V2
+          value: {{ .Values.langchain_tracing_v2 }}
+        - name: LANGCHAIN_PROJECT
+          value: {{ .Values.langchain_project }}
         volumeMounts:
         - mountPath: /rag
           name: rag-src

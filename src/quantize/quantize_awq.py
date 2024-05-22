@@ -13,7 +13,7 @@ model_path = args.model
 quant_path = args.save_path
 # model_path = "yanolja/EEVE-Korean-Instruct-10.8B-v1.0"
 # quant_path = "EEVE-Korean-Instruct-10.8B-v1.0-quantized"
-quant_config = {"zero_point": True, "q_group_size": 128, "w_bit": 4, "version": "GEMM"}
+quant_config = {"zero_point": True, "q_group_size": 128, "w_bit": 4}
 
 # Load model
 model = AutoAWQForCausalLM.from_pretrained(model_path, **{"low_cpu_mem_usage": True})

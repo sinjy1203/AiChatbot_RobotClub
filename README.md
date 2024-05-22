@@ -18,5 +18,8 @@ docker run --gpus all -v {model_directory}:/prepare_model/models sinjy1203/prepa
 - helm/values.yaml 에서 맞는 디렉토리 수정
 ```bash
 cd helm
+# langsmith 사용 안함
 helm install ai-chatbot-robot-club .
+# langsmith 사용
+helm install --set langchain_tracing_v2=t --set langchain_api_key={langsmith_api_key} ai-chatbot-robot-club .
 ```
