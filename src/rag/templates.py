@@ -60,3 +60,10 @@ Human: {question}
 Context: {contexts}
 Assistant: 
 """
+
+TEMPLATE_GENERATE_QUESTION = """
+Given the following context, generate a factual question that is relevant to the information provided in the context.
+Provide question in korean and no preamble or explanation.
+Context: {new_context}
+Response: 
+"""

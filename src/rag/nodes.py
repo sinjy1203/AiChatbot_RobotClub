@@ -1,17 +1,31 @@
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from langchain_core.runnables import RunnableLambda
+from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 import chromadb
 from chromadb.config import Settings
+import uuid
 
 from utils import format_docs, BinaryOutputParser
 from templates import (
     TEMPLATE_RETRIEVAL_GRADE,
     TEMPLATE_CONTEXTUAL_COMPRESSION,
     TEMPLATE_GENERATE,
+    TEMPLATE_GENERATE_QUESTION,
 )
+
+
+class GenerateQuestionNode:
+    def __init__(self, llm, template=TEMPLATE_GENERATE_QUESTION):
+        prompt = PromptTemplate(template=template, input_variables=["new_context"])
+        self.chain = prompt | llm | StrOutputParser()
+
+    def node(self, state):
+        new_document = state["new_context"]
+        question = self.chain.invoke(new_document)
+        state["question"] = question
+        return state
 
 
 class RetrieveNode:
@@ -29,20 +43,22 @@ class RetrieveNode:
         client = chromadb.HttpClient(
             host=chromadb_host, settings=Settings(allow_reset=True)
         )
-        vectorstore = Chroma(
+        self.vectorstore = Chroma(
             client=client,
             collection_name="my_collection",
             embedding_function=embeddings,
         )
-        self.retriever = vectorstore.as_retriever(
+        self.retriever = self.vectorstore.as_retriever(
             search_type="similarity", search_kwargs={"k": top_k}
         )
 
-        self.chain = self.retriever | RunnableLambda(format_docs)
+        self.chain = self.retriever
 
     def node(self, state):
         question = state["question"]
-        contexts = self.chain.invoke(question)
+        docs = self.chain.invoke(question)
+        contexts = format_docs(docs)
+        state["docs"] = docs
         state["contexts"] = contexts
         return state
 
@@ -58,11 +74,44 @@ class GradeRetrievalNode:
         question = state["question"]
         contexts = state["contexts"]
 
+        if len(state["docs"]) == 0:
+            state["retrieved"] = False
+            return state
+
         res = self.chain.invoke({"question": question, "contexts": contexts})
         if res == "예":
             state["retrieved"] = True
         else:
             state["retrieved"] = False
+        return state
+
+
+class UpdateContextNode:
+    def __init__(self, vectorstore):
+        self.vectorstore = vectorstore
+
+    def node(self, state):
+        old_doc = state["docs"][0]
+        old_doc.page_content = state["new_context"]
+
+        self.vectorstore.update_document(
+            old_doc.metadata["id"],
+            old_doc,
+        )
+        state["generation"] = "데이터 업데이트가 완료되었습니다."
+        return state
+
+
+class AddContextNode:
+    def __init__(self, vectorstore):
+        self.vectorstore = vectorstore
+
+    def node(self, state):
+        new_doc = Document(
+            page_content=state["new_context"], metadata={"id": uuid.uuid1().hex}
+        )
+        self.vectorstore.add_documents([new_doc], ids=[new_doc.metadata["id"]])
+        state["generation"] = "데이터가 추가되었습니다."
         return state
 
 

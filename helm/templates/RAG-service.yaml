@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: rag-service
 spec:
+  type: NodePort
   selector:
     app: rag
   ports:
-    - protocol: TCP
-      port: 1200
-      targetPort: 1200
+    - port: 1204
+      targetPort: 1204
+      nodePort: 30500

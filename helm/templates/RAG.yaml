@@ -18,7 +18,7 @@ spec:
       - name: rag
         image: sinjy1203/rag:latest
         ports:
-        - containerPort: 1200
+        - containerPort: 1204
         args: ["python", "main.py"]
         resources:
           requests:
