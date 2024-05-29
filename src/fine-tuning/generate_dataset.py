@@ -1,14 +1,21 @@
 import argparse
 import random
-import re
 import tqdm
-import json
-from functools import partial
+import pandas as pd
 from multiprocessing import Pool
 from rouge_score import rouge_scorer
 from openai import OpenAI
+import wandb
 
 from utils import prompt, generate_context, generate_questions
+
+
+run = wandb.init(project="Grade_Retrieval_LLM_test", entity="sinjy1203")
+artifact = wandb.Artifact(
+    "dataset",
+    type="dataset",
+    description="Generated dataset for fine-tuning grade-retrieval LLM",
+)
 
 
 def get_args():
@@ -33,6 +40,12 @@ def main_generate_contexts(client, args):
 
     with open("seed_contexts.txt", "r") as f:
         seed_contexts = list(map(lambda x: x.strip(), f.readlines()))
+
+    artifact.add(
+        wandb.Table(data=pd.DataFrame({"seed_contexts": seed_contexts})),
+        name="seed_contexts",
+    )
+
     contexts_pool = seed_contexts[:]
     contexts_pool_tokens = [
         scorer._tokenizer.tokenize(context) for context in contexts_pool
@@ -69,20 +82,22 @@ def main_generate_contexts(client, args):
         contexts_pool_tokens += filtered_contexts_tokens
         progress_bar.update(len(filtered_contexts))
 
-    with open("generated_contexts.txt", "w") as f:
-        f.write("\n".join(contexts_pool))
+    artifact.add(
+        wandb.Table(data=pd.DataFrame({"contexts": contexts_pool})),
+        name="generated_contexts",
+    )
+
+    return contexts_pool
 
 
-def main(client, args):
-    with open("generated_contexts.txt", "r") as f:
-        contexts = list(map(lambda x: x.strip(), f.readlines()))
-    random.shuffle(contexts)
+def main(generated_contexts, client, args):
+    random.shuffle(generated_contexts)
 
-    progress_bar = tqdm.tqdm(total=len(contexts), desc="Generating questions")
+    progress_bar = tqdm.tqdm(total=len(generated_contexts), desc="Generating questions")
 
     dataset = []
-    for idx in range(0, len(contexts), args.batch_size):
-        batch_contexts = contexts[idx : idx + args.batch_size]
+    for idx in range(0, len(generated_contexts), args.batch_size):
+        batch_contexts = generated_contexts[idx : idx + args.batch_size]
         batch_prompt_qq_generate = generate_questions.batch_prompt(
             batch_contexts, prompt.prompt_qq_generate
         )
@@ -100,10 +115,7 @@ def main(client, args):
         dataset += batch_data
         progress_bar.update(len(batch_data))
 
-    with open("dataset.jsonl", "w") as f:
-        for data in dataset:
-            json.dump(data, f, ensure_ascii=False)
-            f.write("\n")
+    artifact.add(wandb.Table(data=pd.DataFrame(dataset)), "generated_dataset")
 
 
 if __name__ == "__main__":
@@ -112,5 +124,7 @@ if __name__ == "__main__":
         base_url=args.llm_base_url,
         api_key="EMPTY",
     )
-    main_generate_contexts(client, args)
-    main(client, args)
+    generated_contexts = main_generate_contexts(client, args)
+    main(generated_contexts, client, args)
+    run.log_artifact(artifact)
+    run.finish()

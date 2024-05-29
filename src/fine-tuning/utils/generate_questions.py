@@ -21,8 +21,12 @@ def process_completion(batch_contexts, completion):
             continue
 
         data = [
-            {"context": context, "question": relevant_question.group(1), "label": 1},
-            {"context": context, "question": irrelevant_question.group(1), "label": 0},
+            {"context": context, "question": relevant_question.group(1), "label": "예"},
+            {
+                "context": context,
+                "question": irrelevant_question.group(1),
+                "label": "아니오",
+            },
         ]
         batch_data += data
     return batch_data
