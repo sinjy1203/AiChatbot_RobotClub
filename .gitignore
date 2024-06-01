@@ -8,3 +8,5 @@ embedding_model/
 models/
 chroma-data/
 wandb/
+results/
+artifacts/
