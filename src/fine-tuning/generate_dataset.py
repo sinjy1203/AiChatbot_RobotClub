@@ -10,7 +10,7 @@ import wandb
 from utils import prompt, generate_context, generate_questions
 
 
-run = wandb.init(project="Grade_Retrieval_LLM_test", entity="sinjy1203")
+run = wandb.init(project="Grade_Retrieval_LLM", entity="sinjy1203")
 artifact = wandb.Artifact(
     "dataset",
     type="dataset",
