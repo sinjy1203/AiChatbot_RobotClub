@@ -25,7 +25,10 @@ def parsing(pred):
 def get_args():
     parser = argparse.ArgumentParser(description="Quantize AWQ model")
 
-    parser.add_argument("--run_name", default="EEVE-Korean-Instruct-10.8B-v1.0")
+    parser.add_argument(
+        "--model_artifact", default="model-EEVE-Korean-Instruct-10.8B-v1.0:latest"
+    )
+    parser.add_argument("--dataset_artifact", default="dataset_preprocessed:latest")
 
     args = parser.parse_args()
     return args
@@ -49,6 +52,7 @@ def evaluate(model, tokenizer, df):
                 tokenizer.eos_token_id,
             ],
             pad_token_id=tokenizer.eos_token_id,
+            do_sample=False,  # greedy decoding
         )
 
         pred = tokenizer.decode(generation_output[0])
@@ -71,8 +75,8 @@ def evaluate(model, tokenizer, df):
 def main(args):
     run = wandb.init(project="Grade_Retrieval_LLM", entity="sinjy1203")
 
-    artifact_dataset = run.use_artifact("dataset_preprocessed:latest")
-    artifact_model = run.use_artifact(f"model-{args.run_name}:latest", type="model")
+    artifact_dataset = run.use_artifact(args.dataset_artifact)
+    artifact_model = run.use_artifact(args.model_artifact, type="model")
 
     train_df = artifact_dataset.get("train_dataset").get_dataframe()
     eval_df = artifact_dataset.get("eval_dataset").get_dataframe()

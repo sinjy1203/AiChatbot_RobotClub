@@ -23,8 +23,11 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 def get_args():
     parser = argparse.ArgumentParser(description="Quantize AWQ model")
 
-    parser.add_argument("--model_path", default="beomi/Llama-3-Open-Ko-8B")
-    parser.add_argument("--train_epochs", default=5, type=int)
+    parser.add_argument("--dataset_artifact", default="dataset:latest")
+    parser.add_argument(
+        "--model_path", default="yanolja/EEVE-Korean-Instruct-10.8B-v1.0"
+    )
+    parser.add_argument("--train_epochs", default=10, type=int)
 
     args = parser.parse_args()
     return args
@@ -37,7 +40,7 @@ def row2prompt(row: dict):
 
 def main(args):
     with wandb.init(project="Grade_Retrieval_LLM", entity="sinjy1203") as run:
-        artifact_dataset = run.use_artifact("dataset:latest", type="dataset")
+        artifact_dataset = run.use_artifact(args.dataset_artifact, type="dataset")
 
         df = artifact_dataset.get("generated_dataset").get_dataframe()
         df["prompt"] = df.apply(row2prompt, axis=1)

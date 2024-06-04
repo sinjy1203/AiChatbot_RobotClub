@@ -22,7 +22,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="Quantize AWQ model")
 
     parser.add_argument("--llm_base_url", default="http://localhost:8000/v1")
-    parser.add_argument("--generate_contexts_num", default=100)
+    parser.add_argument("--generate_contexts_num", default=100, type=int)
     parser.add_argument("--n_shot_contexts", default=5)
     parser.add_argument("--prompt_total_contexts_num", default=15)
     parser.add_argument("--batch_size", default=4)
@@ -35,7 +35,7 @@ def get_args():
 def main_generate_contexts(client, args):
     scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=False)
     progress_bar = tqdm.tqdm(
-        total=args.generate_contexts_num, desc="Generating contexts"
+        total=int(args.generate_contexts_num), desc="Generating contexts"
     )
 
     with open("seed_contexts.txt", "r") as f:
