@@ -1,6 +1,8 @@
 import re
 import json
 from langchain_core.output_parsers import BaseOutputParser
+import chromadb
+from langchain_chroma import Chroma
 
 
 def format_docs(docs):
@@ -36,3 +38,16 @@ def get_response_dict(response_text):
 def del_prefix(text, prefix):
     pattern = "^" + re.escape(prefix)
     return re.sub(pattern, "", text).strip()
+
+
+def get_vectorstore(
+    chromadb_host="vectorstore-service.default", collection_name="my_collection"
+):
+    client = chromadb.HttpClient(
+        host=chromadb_host, settings=chromadb.Settings(allow_reset=True)
+    )
+    vectorstore = Chroma(
+        client=client,
+        collection_name=collection_name,
+    )
+    return vectorstore

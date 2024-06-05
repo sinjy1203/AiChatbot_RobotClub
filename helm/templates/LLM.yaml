@@ -22,7 +22,7 @@ spec:
         args: ["--model", "/EEVE-Korean-Instruct-10.8B-v1.0-quantized", "--quantization", "awq", "--gpu-memory-utilization", "0.8"]
         resources:
           limits:
-            nvidia.com/gpu: 1
+            nvidia.com/gpu: 2
             memory: 8Gi
             cpu: "4"
         volumeMounts:

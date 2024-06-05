@@ -17,3 +17,12 @@ class Request(BaseModel):
     bot: Dict = {}
     action: Dict = {}
     contexts: List = []
+
+
+class Document(BaseModel):
+    id: str
+    document: str
+
+
+class DocumentIds(BaseModel):
+    ids: List[str]
