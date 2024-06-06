@@ -21,11 +21,10 @@ class JsonOutputParser(BaseOutputParser[dict]):
 
 
 class BinaryOutputParser(BaseOutputParser[bytes]):
-    def parse(self, text: str) -> bytes:
-        if "예" in text:
-            return "예"
-        else:
-            return "아니오"
+    def parse(self, text: str) -> str:
+        pattern = r"(예|아니오)"
+        match = re.search(pattern, text)
+        return match.group(1)
 
 
 def get_response_dict(response_text):

@@ -1,49 +1,29 @@
-# TEMPLATE_RAG = """
-# Answer the following question based only on the provided context:
-
-# <context>
-# {context}
-# </context>
-
-# Question: {prompt}
-# """
-
-# TEMPLATE_RAG = """
-# A chat between a curious user and an artificial intelligence assistant. The assistant answers the following question based only on the provided context
-# Context: {context}
-# Human: {prompt}
-# Assistant:
-# """
-
-# TEMPLATE_RAG = """
-# Answer the following question based only on the provided Context
-# Context: {context}
-# Human: {prompt}
-# Assistant:
-# """s
-
-# TEMPLATE_RAG = """
-# Answer the following question in one short sentence based only on the provided context.
-# Context: {context}
-# Human: {prompt}
-# Assistant:
-# """
-
-
 TEMPLATE_CHAT = """
 A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
 Human: {prompt}
 Assistant:
 """
 
-TEMPLATE_RETRIEVAL_GRADE = """
-You are a grader assessing whether the information in the context is sufficient to answer the question.
-Give a binary score "예" or "아니오" score to indicate whether the context is sufficient.
-Provide the binary score as a JSON with a single key 'score' and no preamble or explanation.
-Question: {question}
-Context: {contexts}
+# TEMPLATE_RETRIEVAL_GRADE = """
+# You are a grader assessing whether the information in the context is sufficient to answer the question.
+# Give a binary score "예" or "아니오" score to indicate whether the context is sufficient.
+# Provide the binary score as a JSON with a single key 'score' and no preamble or explanation.
+# Question: {question}
+# Context: {contexts}
 
-Grader: 
+# Grader:
+# """
+
+TEMPLATE_RETRIEVAL_GRADE = """주어진 질문과 정보가 주어졌을 때 질문에 답하기에 충분한 정보인지 평가해줘.
+정보가 충분한지를 평가하기 위해 "예" 또는 "아니오"로 답해줘. 
+
+### 질문: 
+{question}
+
+### 정보: 
+{contexts}
+
+### 평가: 
 """
 
 TEMPLATE_CONTEXTUAL_COMPRESSION = """

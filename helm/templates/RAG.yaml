@@ -37,7 +37,7 @@ spec:
         - name: CHROMADB_HOST
           value: vectorstore-service.default
         - name: MODEL_NAME
-          value: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
+          value: /model-awq
         - name: LANGCHAIN_API_KEY
           value: {{ .Values.langchain_api_key }}
         - name: LANGCHAIN_TRACING_V2

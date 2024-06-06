@@ -1,4 +1,4 @@
-LLM_path: /AiChatbot_RobotClub/models/EEVE-Korean-Instruct-10.8B-v1.0-quantized
+LLM_path: /AiChatbot_RobotClub/models/EEVE-Korean-Instruct-10.8B-v1.0-Grade-Retrieval-AWQ
 embedding_model_path: /AiChatbot_RobotClub/models/embedding_model
 
 rag_src_path: /AiChatbot_RobotClub/src/rag
