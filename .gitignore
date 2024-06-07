@@ -7,3 +7,7 @@ test_nginx/
 embedding_model/
 models/
 chroma-data/
+wandb/
+results/
+artifacts/
+.vscode/

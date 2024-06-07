@@ -1,6 +1,8 @@
 import re
 import json
 from langchain_core.output_parsers import BaseOutputParser
+import chromadb
+from langchain_chroma import Chroma
 
 
 def format_docs(docs):
@@ -19,11 +21,10 @@ class JsonOutputParser(BaseOutputParser[dict]):
 
 
 class BinaryOutputParser(BaseOutputParser[bytes]):
-    def parse(self, text: str) -> bytes:
-        if "예" in text:
-            return "예"
-        else:
-            return "아니오"
+    def parse(self, text: str) -> str:
+        pattern = r"(예|아니오)"
+        match = re.search(pattern, text)
+        return match.group(1)
 
 
 def get_response_dict(response_text):
@@ -36,3 +37,16 @@ def get_response_dict(response_text):
 def del_prefix(text, prefix):
     pattern = "^" + re.escape(prefix)
     return re.sub(pattern, "", text).strip()
+
+
+def get_vectorstore(
+    chromadb_host="vectorstore-service.default", collection_name="my_collection"
+):
+    client = chromadb.HttpClient(
+        host=chromadb_host, settings=chromadb.Settings(allow_reset=True)
+    )
+    vectorstore = Chroma(
+        client=client,
+        collection_name=collection_name,
+    )
+    return vectorstore

@@ -19,14 +19,14 @@ spec:
         image: vllm/vllm-openai:latest
         ports:
         - containerPort: 8000
-        args: ["--model", "/EEVE-Korean-Instruct-10.8B-v1.0-quantized", "--quantization", "awq", "--gpu-memory-utilization", "0.8"]
+        args: ["--model", "/model-awq", "--quantization", "awq", "--gpu-memory-utilization", "0.7"]
         resources:
           limits:
-            nvidia.com/gpu: 1
+            nvidia.com/gpu: 2
             memory: 8Gi
             cpu: "4"
         volumeMounts:
-        - mountPath: /EEVE-Korean-Instruct-10.8B-v1.0-quantized
+        - mountPath: /model-awq
           name: vllm-model
       volumes:
       - name: vllm-model

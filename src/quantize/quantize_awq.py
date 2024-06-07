@@ -1,6 +1,9 @@
+import os
 import argparse
 from awq import AutoAWQForCausalLM
 from transformers import AutoTokenizer
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 parser = argparse.ArgumentParser(description="Quantize AWQ model")
 

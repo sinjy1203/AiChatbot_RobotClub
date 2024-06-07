@@ -16,6 +16,16 @@ def generate(
     llm_model,
     top_k=3,
 ):
+    llm_grade_retrieval = VLLMOpenAI(
+        openai_api_key="EMPTY",
+        openai_api_base=llm_api_base,
+        model_name=llm_model,
+        model_kwargs={
+            "stop": ["#", "##", "###", "<|end_of_text|>"],
+        },
+        temperature=0,
+    )
+
     llm = VLLMOpenAI(
         openai_api_key="EMPTY",
         openai_api_base=llm_api_base,
@@ -32,7 +42,9 @@ def generate(
         chromadb_host=chromadb_host,
         top_k=1,
     )
-    grade_retrieval = GradeRetrievalNode(llm=llm, template=TEMPLATE_RETRIEVAL_GRADE)
+    grade_retrieval = GradeRetrievalNode(
+        llm=llm_grade_retrieval, template=TEMPLATE_RETRIEVAL_GRADE
+    )
     update_context = UpdateContextNode(vectorstore=retrieve_top1.vectorstore)
     add_context = AddContextNode(vectorstore=retrieve_top1.vectorstore)
 
