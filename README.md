@@ -6,7 +6,8 @@
 ![chatbot_robotclub drawio](https://github.com/sinjy1203/AiChatbot_RobotClub/assets/52316531/5158e4f7-b37d-4333-ba60-f841459c7925)
 ### RAG pipeline
 ![LangGraph_diagram drawio](https://github.com/sinjy1203/AiChatbot_RobotClub/assets/52316531/06d4df1a-4045-4650-9f90-d52990083e00)
-
+## Fine-tuned LLM Model
+[sinjy1203/EEVE-Korean-Instruct-10.8B-v1.0-Grade-Retrieval](https://huggingface.co/sinjy1203/EEVE-Korean-Instruct-10.8B-v1.0-Grade-Retrieval)
 ## Prerequisites
 - `Docker`, `kubernetes`, `helm` installed
 ## Usage
